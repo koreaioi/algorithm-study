@@ -8,6 +8,8 @@ public class Main {
 
     public static final int MINIMUM_BOARD_SIZE = 1;
     public static int n, r, c, count;
+    public static int[] dx = {0, 0, 1, 1};
+    public static int[] dy = {0, 1, 0, 1};
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -26,29 +28,15 @@ public class Main {
         }
 
         int half = boardSize / 2;
-        if (containTarget(half, x, y)) { // Left Up
-            recursion(half, x, y);
-            return;
+        for (int i = 0; i < 4; i++) {
+            int nx = x + (dx[i] * half);
+            int ny = y + (dy[i] * half);
+            if (containTarget(half, nx, ny)) {
+                count += (int) (Math.pow(half, 2)) * i;
+                recursion(half, nx, ny);
+                return;
+            }
         }
-
-        if (containTarget(half, x, y + half)) { // Right Up
-            count += (int) (Math.pow(half, 2)) * 1;
-            recursion(half, x, y + half);
-            return;
-        }
-
-        if (containTarget(half, x + half, y)) { // Left Down
-            count += (int) (Math.pow(half, 2)) * 2;
-            recursion(half, x + half, y);
-            return;
-        }
-
-        if (containTarget(half, x + half, y + half)) { // Right Down
-            count += (int) (Math.pow(half, 2)) * 3;
-            recursion(half, x + half, y + half);
-            return;
-        }
-
     }
 
     private static boolean isMinimumSize(int boardSize) {
