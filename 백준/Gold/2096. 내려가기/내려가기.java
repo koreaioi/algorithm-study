@@ -8,59 +8,78 @@ import java.util.StringTokenizer;
 /**
  * 메모리 초과 발생
  * 100,000 * 100,000....
- * <p>
- * 음... DP에 필요한 건 직전의 값...!?
- * 일단 배열 포기! 하드코딩!
- *
- */
+ * */
 public class Main {
 
     public static final int COUNT_OF_NUMBER = 3;
+    public static final int[] FIRST_DIRECTIONS = new int[]{0, 1};
+    public static final int[] SECOND_DIRECTIONS = new int[]{-1, 0, 1};
+    public static final int[] THIRD_DIRECTIONS = new int[]{-1, 0};
+    public static final int[][] DIRECTIONS = new int[][]{
+            FIRST_DIRECTIONS,
+            SECOND_DIRECTIONS,
+            THIRD_DIRECTIONS
+    };
 
     public static int n;
     public static int[][] board;
-    public static int[] maxDp = new int[COUNT_OF_NUMBER];
-    public static int[] minDp = new int[COUNT_OF_NUMBER];
-
+    public static int[][] minimumDP;
+    public static int[][] maximumDP;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
 
         n = Integer.parseInt(st.nextToken());
+        board = new int[n][COUNT_OF_NUMBER];
+        minimumDP = new int[n][COUNT_OF_NUMBER];
+        maximumDP = new int[n][COUNT_OF_NUMBER];
 
-        st = new StringTokenizer(br.readLine());
-        for (int i = 0; i < COUNT_OF_NUMBER; i++) {
-            int value = Integer.parseInt(st.nextToken());
-            maxDp[i] = value;
-            minDp[i] = value;
-        }
-
-        for (int i = 1; i < n; i++) {
+        for (int i = 0; i < n; i++) {
             st = new StringTokenizer(br.readLine());
-            int n0 = Integer.parseInt(st.nextToken());
-            int n1 = Integer.parseInt(st.nextToken());
-            int n2 = Integer.parseInt(st.nextToken());
-
-            int pMaxDp0 = maxDp[0];
-            int pMaxDp1 = maxDp[1];
-            int pMaxDp2 = maxDp[2];
-
-            int pMinDp0 = minDp[0];
-            int pMinDp1 = minDp[1];
-            int pMinDp2 = minDp[2];
-
-            maxDp[0] = Math.max(n0 + pMaxDp0, n0 + pMaxDp1);
-            maxDp[1] = Math.max(n1 + pMaxDp0, Math.max(n1 + pMaxDp1, n1 + pMaxDp2));
-            maxDp[2] = Math.max(n2 + pMaxDp1, n2 + pMaxDp2);
-
-            minDp[0] = Math.min(n0 + pMinDp0, n0 + pMinDp1);
-            minDp[1] = Math.min(n1 + pMinDp0, Math.min(n1 + pMinDp1, n1 + pMinDp2));
-            minDp[2] = Math.min(n2 + pMinDp1, n2 + pMinDp2);
+            for (int j = 0; j < COUNT_OF_NUMBER; j++) {
+                board[i][j] = Integer.parseInt(st.nextToken());
+            }
         }
 
-        System.out.println(Arrays.stream(maxDp).max().getAsInt());
-        System.out.println(Arrays.stream(minDp).min().getAsInt());
+        for (int[] minimum : minimumDP) {
+            Arrays.fill(minimum, Integer.MAX_VALUE);
+        }
+
+        for (int i = 0; i < COUNT_OF_NUMBER; i++) {
+            maximumDP[0][i] = board[0][i];
+            minimumDP[0][i] = board[0][i];
+        }
+
+        for (int i = 0; i < n - 1; i++) {
+            for (int index = 0; index < COUNT_OF_NUMBER; index++) {
+                doMaximumDynamicProgramming(i, index, maximumDP[i][index]);
+                doMinimumDynamicProgramming(i, index, minimumDP[i][index]);
+            }
+        }
+
+        int max = Arrays.stream(maximumDP[n - 1]).max().getAsInt();
+        int min = Arrays.stream(minimumDP[n - 1]).min().getAsInt();
+        System.out.println(max);
+        System.out.println(min);
+    }
+
+    public static void doMaximumDynamicProgramming(int x, int index, int beforeDpValue) {
+        int nx = x + 1;
+        int[] directions = DIRECTIONS[index];
+        for (int i = 0; i < directions.length; i++) {
+            int ny = index + directions[i];
+            maximumDP[nx][ny] = Math.max(maximumDP[nx][ny], beforeDpValue + board[nx][ny]);
+        }
+    }
+
+    public static void doMinimumDynamicProgramming(int x, int index, int beforeDpValue) {
+        int nx = x + 1;
+        int[] directions = DIRECTIONS[index];
+        for (int i = 0; i < directions.length; i++) {
+            int ny = index + directions[i];
+            minimumDP[nx][ny] = Math.min(minimumDP[nx][ny], beforeDpValue + board[nx][ny]);
+        }
     }
 
 }
