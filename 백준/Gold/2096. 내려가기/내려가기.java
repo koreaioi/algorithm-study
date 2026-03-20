@@ -69,7 +69,7 @@ public class Main {
         int[] directions = DIRECTIONS[index];
         for (int i = 0; i < directions.length; i++) {
             int ny = index + directions[i];
-            maximumDP[nx][ny] = Math.max(maximumDP[nx][ny], beforeDpValue + board[nx][ny]);
+            maximumDP[nx][ny] = Math.max(maximumDP[nx][ny], maximumDP[x][index] + board[nx][ny]);
         }
     }
 
@@ -78,7 +78,7 @@ public class Main {
         int[] directions = DIRECTIONS[index];
         for (int i = 0; i < directions.length; i++) {
             int ny = index + directions[i];
-            minimumDP[nx][ny] = Math.min(minimumDP[nx][ny], beforeDpValue + board[nx][ny]);
+            minimumDP[nx][ny] = Math.min(minimumDP[nx][ny], minimumDP[x][index] + board[nx][ny]);
         }
     }
 
