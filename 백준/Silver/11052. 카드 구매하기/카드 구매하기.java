@@ -25,11 +25,13 @@ public class Main {
 
         // dp[i]를 i장 구매할 때, 최대 비용으로 생각.
         dp[1] = cardPack[1];
-
+        
         for (int i = 2; i <= n; i++) {
-            for (int j = 1; j <= i; j++) {
-                dp[i] = Math.max(dp[i], dp[i - j] + cardPack[j]);
+            int max = 0;
+            for (int j = 0; j <= i; j++) {
+                max = Math.max(max, dp[i - j] + cardPack[j]);
             }
+            dp[i] = max;
         }
 
         System.out.println(dp[n]);
