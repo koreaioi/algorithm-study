@@ -5,14 +5,12 @@ class Solution {
     // 괄호 (,) -> 스택 국룰
     
     boolean solution(String input) {
-        char[] spilted = input.toCharArray();
-
         Deque<Character> q = new ArrayDeque<>();
         boolean answer = true;
-        q.push(spilted[0]); // stack처럼 쓸거면 push();
+        q.push(input.charAt(0)); // stack처럼 쓸거면 push();
             
-        for(int i = 1 ; i < spilted.length ; i++){
-            char s = spilted[i];
+        for(int i = 1 ; i < input.length() ; i++){
+            char s = input.charAt(i);
             if(s == '('){
                 q.push(s);
                 continue;
