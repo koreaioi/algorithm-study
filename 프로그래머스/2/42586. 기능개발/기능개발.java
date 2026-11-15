@@ -16,25 +16,35 @@ class Solution {
         Deque<Integer> q = new ArrayDeque<>();
         List<Integer> al = new ArrayList<>();
         
-        for(int i = 0 ; i < progresses.length ; i++){
-            int done = (100 - progresses[i] + speeds[i] -1) / speeds[i];
-            System.out.println(done);
-            q.offer(done);
-        }
-        
-        int max = q.poll();
+        int max = (100 - progresses[0] + speeds[0] -1) / speeds[0];
         int count = 1;
-        int L = q.size();
-        for(int i =  0; i < L; i++){
-            int target = q.poll();
+        for(int i = 1 ; i < progresses.length ; i++){
+            int target = (100 - progresses[i] + speeds[i] -1) / speeds[i];
             if(max >= target){
                 count++;
-            } else {
+            }else{
                 al.add(count);
-                count = 1;
+                count=1;
                 max = target;
             }
+            
+            // System.out.println(done);
+            // q.offer(done);
         }
+        
+        // int max = q.poll();
+        // int count = 1;
+        // int L = q.size();
+        // for(int i =  0; i < L; i++){
+        //     int target = q.poll();
+        //     if(max >= target){
+        //         count++;
+        //     } else {
+        //         al.add(count);
+        //         count = 1;
+        //         max = target;
+        //     }
+        // }
         al.add(count);
         
         int[] answer = al.stream()
