@@ -1,21 +1,37 @@
 import java.util.*;
 
 class Solution {
-    boolean solution(String s) {
-        Stack<Character> st = new Stack<Character>();
+    
+    // 괄호 (,) -> 스택 국룰
+    
+    boolean solution(String input) {
+        char[] spilted = input.toCharArray();
 
-        for(char c : s.toCharArray()){
-            if(c == ')'){
-                if(st.isEmpty()){
-                    return false;
-                }else{
-                    st.pop();
-                }
-            }else{
-                st.push(c);
+        Deque<Character> q = new ArrayDeque<>();
+        boolean answer = true;
+        q.push(spilted[0]); // stack처럼 쓸거면 push();
+            
+        for(int i = 1 ; i < spilted.length ; i++){
+            char s = spilted[i];
+            if(s == '('){
+                q.push(s);
+                continue;
+            }
+            
+            if(s == ')' && q.size()==0){
+                return false;
+            }
+            
+            if(s == ')' && q.peek() == '('){
+                q.pop();
+                continue;
             }
         }
-
-        return st.isEmpty() ? true : false;
+        
+        if(q.size() > 0){
+            answer = false;
+        }
+        
+        return answer;
     }
 }
