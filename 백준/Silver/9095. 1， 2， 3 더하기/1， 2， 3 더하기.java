@@ -1,44 +1,39 @@
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.*;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
 public class Main {
 
-    public static final int ONE = 1;
-    public static final int TWO = 2;
-    public static final int THREE = 3;
-    public static final int[] TOOLS = new int[]{ONE, TWO, THREE};
-    
-    public static int bound; // bound == target인데 의미가 달라서 분리해봄
-    public static int target;
-    public static int count;
-
     public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+
+        int num = Integer.parseInt(st.nextToken());
+        int[] arr = new int[num + 1];
+        int[] dp = new int[11 + 1];
+        for(int i = 1; i <= num; i++){
+            st = new StringTokenizer(br.readLine());
+            arr[i] = Integer.valueOf(st.nextToken());
+        }
+
+        // dp 미리 구해두기.
+        dp[1] = 1;
+        dp[2] = 2;
+        dp[3] = 4;
+        for (int i = 4; i <= 11; i++) {
+            dp[i] = dp[i - 1] + dp[i - 2] + dp[i - 3];
+        }
+
         StringBuilder sb = new StringBuilder();
-        Scanner scanner = new Scanner(System.in);
-        int t = scanner.nextInt(); // 테스트 케이스
-        for (int i = 0; i < t; i++) {
-            target = scanner.nextInt();
-            bound = target;
-            count = 0;
-            dfs(0);
-            sb.append(count).append("\n");
-        }
-        System.out.println(sb);
-    }
-
-    public static void dfs(int sum) {
-        if (sum > bound) {
-            return;
+        for (int i = 1; i <= num; i++) {
+            sb.append(dp[arr[i]]).append("\n");
         }
 
-        if (sum == bound) {
-            count++;
-            return;
-        }
-
-        for (int value : TOOLS) {
-            dfs(sum + value);
-        }
+//        for (int index : arr) {
+//            sb.append(dp[index]).append("\n");
+//        }
+        System.out.println(sb.toString());
     }
 
 }
