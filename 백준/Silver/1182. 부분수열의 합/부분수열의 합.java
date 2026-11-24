@@ -1,61 +1,52 @@
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.StringTokenizer;
 
+/**
+ * https://acmicpc.net/problem/1463
+ *
+ */
 public class Main {
 
-    public static boolean[] visited;
-    public static int[] tools;
-    public static int n, target, count;
+    public static int N, S, count;
+    public static int[] arr;
 
     public static void main(String[] args) throws IOException {
-        StringBuilder sb = new StringBuilder();
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        n = Integer.parseInt(st.nextToken());
-        target = Integer.parseInt(st.nextToken());
 
-        visited = new boolean[n + 1];
-        tools = new int[n + 1];
-
-        // initialize
+        N = Integer.parseInt(st.nextToken());
+        S = Integer.parseInt(st.nextToken());
+        arr = new int[N]; // 숫자를 저장해두는 배열.
         st = new StringTokenizer(br.readLine());
-        for (int i = 1; i <= n; i++) {
-            tools[i] = Integer.parseInt(st.nextToken());
+        for (int i = 0; i < N; i++) { // 초기화
+            arr[i] = Integer.valueOf(st.nextToken());
         }
 
-        dfs(1, 0);
-        if (target == 0) {
-            System.out.println(count - 1);
-            return;
-        }
+        int depth = 0; //
+        int sum = 0;
 
+        combination(0, 0, 0);
         System.out.println(count);
     }
 
-    public static void dfs(int level, int sum) {
-        if (level == n + 1) {
-            if (sum == target) {
-//                printArray(tools);
-                count++;
-            }
+    public static void combination(int sum, int depth, int startIndex) {
+        // 종료 조건
+        if (depth != 0 && sum == S) {
+            count++;
+        }
+
+        if(depth == N){
             return;
         }
 
-        dfs(level + 1, sum + tools[level]);
-        dfs(level + 1, sum);
-    }
-
-    public static void printArray(int[] arr) {
-        for (int i = 1; i <= n; i++) {
-            if (visited[i]) {
-                System.out.print("0 ");
-            }else{
-                System.out.print(tools[i] + " ");
-            }
+        // 조합
+        for (int i = startIndex; i < N; i++) {
+            combination(sum + arr[i], depth + 1, i + 1);
         }
-        System.out.println();
+
     }
 
 }
