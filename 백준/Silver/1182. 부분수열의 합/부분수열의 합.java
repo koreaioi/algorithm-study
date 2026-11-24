@@ -5,7 +5,7 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 /**
- * https://acmicpc.net/problem/1463
+ * https://acmicpc.net/problem/1182
  *
  */
 public class Main {
@@ -25,13 +25,25 @@ public class Main {
             arr[i] = Integer.valueOf(st.nextToken());
         }
 
-        int depth = 0; //
-        int sum = 0;
-
-        combination(0, 0, 0);
+        dfs(0, 0);
+        if(S == 0) count--;
         System.out.println(count);
     }
 
+    // 반복문 없이 dfs로 풀기.
+    public static void dfs(int sum, int depth) {
+        if (depth == N) {
+            if (sum == S) {
+                count++;
+            }
+            return;
+        }
+
+        dfs(sum + arr[depth], depth + 1);
+        dfs(sum, depth + 1);
+    }
+
+    // Combination으로 풀어보기.
     public static void combination(int sum, int depth, int startIndex) {
         // 종료 조건
         if (depth != 0 && sum == S) {
