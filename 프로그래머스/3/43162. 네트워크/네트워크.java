@@ -2,48 +2,36 @@ import java.util.*;
 
 class Solution {
     
-    public static int networkCount = 0;
+    public static int L;
     
     public int solution(int n, int[][] computers) {
-        for(int i = 0 ; i < n ; i++){
-            for(int j = 0 ; j < n ; j++){
+        L = computers.length;
+        // for(int i = 0 ; i< L;i++){
+            // computers[i][i] = 0;
+        // }
+
+        int answer = 0;
+        for(int i = 0; i< L;i++){
+            for(int j = 0 ; j < L ; j++){
                 if(computers[i][j] == 1){
-                    findNetwork(i, j, computers);
+                    findAndMask(i, computers);
+                    answer++;
                 }
             }
         }
-                
-        return networkCount;
+        
+        return answer;
     }
     
-    public static void findNetwork(int u, int v, int[][] computers){
+    public static void findAndMask(int startComputer, int[][] computers){
+        computers[startComputer][startComputer] = 0;
         
-        Queue<Edge> q = new LinkedList<>();
-        q.add(new Edge(u, v));
-        computers[u][v] = 0;
-        computers[v][u] = 0;
-        
-        while(!q.isEmpty()){
-            Edge e = q.poll();
-            int next = e.v;   
-            for(int i = 0 ; i < computers[next].length ; i++){
-                if(computers[next][i] == 1){
-                    q.add(new Edge(next, i));
-                    computers[next][i] = 0;
-                    computers[i][next] = 0;
-                }
+        for(int i = 0 ; i< L ;i++){
+            if(computers[startComputer][i] == 1){
+                computers[startComputer][i] = 0;
+                computers[i][startComputer] = 0;
+                findAndMask(i, computers);
             }
-            
-        }
-        networkCount++;
-    }
-    
-    public static class Edge {
-        int u;
-        int v;
-        Edge(int u, int v){
-            this.u = u;
-            this.v = v;
         }
     }
     
